@@ -1,11 +1,76 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "acquittal",
+    "title": "Draft grant acquittal",
+    "for_each": "select id,name from grants",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Award balance",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select name,currency,awarded_cents,actual_cents,remaining_cents from grant_balances where id=$1"
+      },
+      {
+        "title": "Restrictions and source reconciliation",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select restrictions,agreement_ref,source_changed from grants where id=$1"
+      },
+      {
+        "title": "Budget versus actual and planned",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select category,budget_cents,actual_cents,planned_cents,available_cents,currency from budget_variance where grant_id=$1"
+      },
+      {
+        "title": "Evidence gaps",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select issue,reference from evidence_gaps where id=$1"
+      },
+      {
+        "title": "Outcomes and reports",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select title,kind,due_on,completed_on,evidence_ref from tasks where grant_id=$1"
+      }
+    ]
+  },
+  {
+    "name": "application-brief",
+    "title": "Draft application brief",
+    "for_each": "select id,name from grants",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Application",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select name,project,funder,owner,currency,requested_cents,deadline from grants where id=$1"
+      },
+      {
+        "title": "Preparation tasks",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select title,due_on,owner,requirement_ref from tasks where grant_id=$1"
+      }
+    ]
+  },
+  {
+    "name": "evidence-register",
+    "title": "Grant evidence register",
+    "for_each": "select id,name from grants",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Agreement",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select name,agreement_ref,restrictions from grants where id=$1"
+      },
+      {
+        "title": "Spending evidence",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select reference,category,spent_on,amount_cents,state,evidence_ref from expenses where grant_id=$1"
+      },
+      {
+        "title": "Deliverable evidence",
+        "note": "Internal working paper. Verify against the signed agreement and accounting records. Never submitted automatically.",
+        "sql": "select title,kind,completed_on,evidence_ref from tasks where grant_id=$1"
+      }
     ]
   }
 ]

@@ -1,43 +1,50 @@
-# Grant Operations for Claude Code: operating instructions
+# Grant Operations for Claude Code
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+This is a grant-recipient desk for applications, restricted awards, spending evidence and reports. Read docs/compliance.md and docs/replace-instrumentl.md before business imports.
 
-## Who this is for
+Every answer starts with a CLI read. Use scripts/grants.mjs, not a second workflow library. The slash recipes in .claude/commands work in every agent.
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
-
-Fill this in once. A worker with context knows. A worker without it guesses.
-
-## How to work
-
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
-
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
+| Request | Recipe |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| grants | /grants |
+| grant | /grant |
+| pipeline | /pipeline |
+| deadlines | /deadlines |
+| awards | /awards |
+| spenddown | /spenddown |
+| budgets | /budgets |
+| expenses | /expenses |
+| tasks | /tasks |
+| reports-due | /reports-due |
+| evidence-gaps | /evidence-gaps |
+| attention | /attention |
+| compliance | /compliance |
+| weekly-review | /weekly-review |
+| history | /history |
+| imports | /imports |
+| organisations | /organisations |
+| add-organisation | /add-organisation |
+| file-annual | /file-annual |
+| add-grant | /add-grant |
+| set-grant | /set-grant |
+| set-task | /set-task |
+| set-budget | /set-budget |
+| add-expense | /add-expense |
+| post-expense | /post-expense |
+| void-expense | /void-expense |
+| add-task | /add-task |
+| complete-task | /complete-task |
+| log | /log |
+| acknowledge-source | /acknowledge-source |
+| import | /import |
+| export | /export |
+| draft-acquittal | /draft-acquittal |
+| draft-application | /draft-application |
+| Change the business rules | /customise |
+| Add a read-only report | /new-view |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
+Never invent a grant, amount, restriction, outcome or evidence reference. Resolve ambiguous names before any write. Record the operator as actor; this is attribution, not authentication. All writes and imports are transactional. Preserve raw source rows and reconcile source_changed before reporting. Keep currencies separate and unknown amounts unknown. A budget category is not a legal eligibility decision.
 
-## Hard rules
+Never submit applications or reports, email, make payments, delete records or expose evidence publicly. Drafts stay local. Reconcile with signed agreements and the accounting ledger. Embedded mode is single operator. Shared use requires authenticated roles, organisation isolation and backups. The owner database account bypasses row-level security.
 
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
-
-## Where things live
-
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off Instrumentl.
-
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/instrumentl
+Schema: supabase/migrations. Adapter: scripts/lib/db.mjs. Working papers: documents.json. Read-only reports: views.json. Brand: brand.json. Changes use new migrations and npm test before business data.

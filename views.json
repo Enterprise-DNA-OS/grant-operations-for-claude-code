@@ -1,13 +1,34 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Grant Operations for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Grant team weekly review",
+    "subtitle": "Applications, award balances and reports requiring a decision",
     "sections": [
       {
         "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "sql": "select name,owner,issue,due_on from grant_attention order by due_on nulls last"
+      },
+      {
+        "title": "Award balances",
+        "sql": "select name,currency,awarded_cents,actual_cents,planned_cents,uncommitted_cents,end_date from grant_balances where status='awarded'"
+      },
+      {
+        "title": "Reports due",
+        "sql": "select g.name,t.title,t.due_on,t.owner from tasks t join grants g on g.id=t.grant_id where t.kind='report' and t.completed_on is null"
+      }
+    ]
+  },
+  {
+    "name": "evidence",
+    "title": "Grant evidence and category budgets",
+    "sections": [
+      {
+        "title": "Evidence gaps",
+        "sql": "select name,issue,reference from evidence_gaps order by name"
+      },
+      {
+        "title": "Category budgets",
+        "sql": "select name,currency,category,budget_cents,actual_cents,planned_cents,available_cents from budget_variance order by name,category"
       }
     ]
   }
