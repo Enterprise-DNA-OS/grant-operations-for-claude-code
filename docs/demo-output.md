@@ -20,10 +20,10 @@ What funding remains after actual and planned spending?
 
 ```text
 > node scripts/grants.mjs awards
-  name                  currency  awarded amount  actual amount  planned amount  remaining amount  uncommitted amount  end date  
-  --------------------  --------  --------------  -------------  --------------  ----------------  ------------------  ----------
-  Community Meals 2026  NZD       40000.00        21000.00       15000.00        19000.00          4000.00             2026-11-14
-  Community Transport   AUD       30000.00        32000.00       0.00            -2000.00          -2000.00            2026-10-20
+  name                  currency  awarded   actual    planned   uncommitted
+  --------------------  --------  --------  --------  --------  -----------
+  Community Meals 2026  NZD       40000.00  21000.00  15000.00  4000.00    
+  Community Transport   AUD       30000.00  32000.00  0.00      -2000.00
 ```
 
 ## Evidence gaps

@@ -34,7 +34,7 @@ const READS={
  grants:'select id,name,project,funder,owner,currency,status,deadline from grants order by name',
  pipeline:'select currency,status,count(*)::int grants,sum(requested_cents)::bigint requested_cents from grants group by currency,status order by currency,status',
  deadlines:"select name,owner,status,deadline from grants where status in ('prospect','preparing','submitted') order by deadline nulls last",
- awards:"select name,currency,awarded_cents,actual_cents,planned_cents,remaining_cents,uncommitted_cents,end_date from grant_balances where status='awarded' order by name",
+ awards:"select name,currency,awarded_cents,actual_cents,planned_cents,uncommitted_cents from grant_balances where status='awarded' order by name",
  'reports-due':"select t.id,g.name,t.title,t.owner,t.due_on from tasks t join grants g on g.id=t.grant_id where t.kind='report' and t.completed_on is null order by t.due_on",
  attention:'select name,owner,issue,due_on from grant_attention order by due_on nulls last,name',
  'evidence-gaps':'select name,issue,reference from evidence_gaps order by name,issue',
@@ -158,7 +158,7 @@ export async function run(db,args){
  }catch(e){await db.exec('ROLLBACK');throw e;}
 }
 function display(value){
- if(Array.isArray(value)){if(!value.length)return '  (none)';const keys=Object.keys(value[0]);const rows=value.map(r=>Object.fromEntries(keys.map(k=>{let v=r[k];if(v!==null&&k.endsWith('_cents'))v=(Number(v)/100).toFixed(2);else if(v&&typeof v==='object')v=JSON.stringify(v);return [k,v];})));return table(rows,keys.map(key=>({key,label:key.replace(/_cents$/,' amount').replaceAll('_',' '),width:90})));}
+ if(Array.isArray(value)){if(!value.length)return '  (none)';const keys=Object.keys(value[0]);const rows=value.map(r=>Object.fromEntries(keys.map(k=>{let v=r[k];if(v!==null&&k.endsWith('_cents'))v=(Number(v)/100).toFixed(2);else if(v&&typeof v==='object')v=JSON.stringify(v);return [k,v];})));return table(rows,keys.map(key=>({key,label:key.replace(/_cents$/,'').replaceAll('_',' '),width:90})));}
  return Object.entries(value).map(([k,v])=>`${k}\n${Array.isArray(v)?display(v):typeof v==='object'?JSON.stringify(v):v}`).join('\n\n');
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
